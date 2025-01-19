@@ -393,3 +393,153 @@ textarea {
         flex: 1 1 300px;
     }
 }
+/* Add these new styles while keeping all existing CodeMirror styles */
+.editor h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.copy-btn {
+    background: transparent;
+    border: none;
+    padding: 0.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    min-width: auto;
+    box-shadow: none;
+}
+
+.editor.html .copy-btn { color: #FF5722; }
+.editor.css .copy-btn { color: #2196F3; }
+.editor.js .copy-btn { color: #FFC107; }
+
+.copy-btn:hover {
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+@media (max-width: 768px) {
+    .copy-btn {
+        padding: 0.3rem;
+        font-size: 0.8rem;
+    }
+}
+.copy-btn {
+    background: transparent;
+    border: none;
+    padding: 0.4rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    min-width: auto;
+    box-shadow: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+}
+
+.editor h2 {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.editor h2 span {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+@media (max-width: 768px) {
+    .copy-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 0.8rem;
+    }
+}
+#run-code {
+    background: linear-gradient(45deg, #2d5a2e, #3a7a3d);
+    box-shadow: 0 4px 15px rgba(45, 90, 46, 0.3);
+}
+
+#run-code:hover {
+    background: linear-gradient(45deg, #326334, #428745);
+    transform: translateY(-2px);
+}
+
+#reset-code {
+    background: linear-gradient(45deg, #8b2f22, #a13a2a);
+    box-shadow: 0 4px 15px rgba(139, 47, 34, 0.3);
+}
+
+#reset-code:hover {
+    background: linear-gradient(45deg, #9e3627, #b44230);
+    transform: translateY(-2px);
+}
+
+#share-code {
+    background: linear-gradient(45deg, #1e4976, #2a5f96);
+    box-shadow: 0 4px 15px rgba(30, 73, 118, 0.3);
+}
+
+#share-code:hover {
+    background: linear-gradient(45deg, #245688, #306baa);
+    transform: translateY(-2px);
+}
+header {
+    background: linear-gradient(45deg, #2d2d2d, #363636);
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 1.5rem;
+    box-shadow: var(--box-shadow);
+    border-bottom: 2px solid var(--border-color);
+}
+
+header h1 {
+    font-size: 2.2rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+}
+
+header h1 i {
+    color: var(--primary-color);
+    font-size: 1.8rem;
+}
+
+header p {
+    margin: 0.5rem 0 0;
+    color: #888;
+    font-size: 1rem;
+    letter-spacing: 0.5px;
+}
+
+@media (max-width: 768px) {
+    header h1 {
+        font-size: 1.8rem;
+    }
+    
+    header p {
+        font-size: 0.9rem;
+    }
+}
+header h1 img {
+    width: 28px;
+    height: 28px;
+    margin-right: 0.5rem;
+    transition: transform 0.3s ease;
+}
+
+header h1:hover img {
+    transform: scale(1.1);
+}

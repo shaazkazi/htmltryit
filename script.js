@@ -23,6 +23,30 @@ const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
     lineWrapping: true
 });
 
+// Add copy functionality
+function copyEditorContent(editorId) {
+    const content = editorId === 'html' ? htmlEditor.getValue() :
+                   editorId === 'css' ? cssEditor.getValue() :
+                   jsEditor.getValue();
+    
+    navigator.clipboard.writeText(content).then(() => {
+        const btn = document.querySelector(`.editor.${editorId} .copy-btn i`);
+        btn.className = 'fas fa-check';
+        btn.style.transform = 'scale(1.2)';
+        
+        setTimeout(() => {
+            btn.className = 'fas fa-copy';
+            btn.style.transform = 'scale(1)';
+        }, 2000);
+    });
+}
+// Add click handlers for copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        copyEditorContent(btn.dataset.editor);
+    });
+});
+
 document.getElementById('run-code').addEventListener('click', () => {
     const htmlCode = htmlEditor.getValue();
     const cssCode = `<style>${cssEditor.getValue()}</style>`;
@@ -46,8 +70,7 @@ document.getElementById('reset-code').addEventListener('click', () => {
 });
 
 document.getElementById('share-code').addEventListener('click', async () => {
-    const formattedCode = `<!-- HTML -->
-${htmlEditor.getValue()}
+    const formattedCode = `${htmlEditor.getValue()}
 
 /* CSS */
 ${cssEditor.getValue()}
