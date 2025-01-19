@@ -46,14 +46,9 @@ function handleEditorAction(editorId, action) {
             const cursor = doc.getCursor();
             doc.replaceRange(text, cursor);
         });
-    } else if (action === 'clear') {
-        const editor = editorId === 'html' ? htmlEditor :
-                      editorId === 'css' ? cssEditor :
-                      jsEditor;
-        editor.setValue('');
-        editor.clearHistory();
     }
-}document.querySelectorAll('.copy-action').forEach(btn => {
+}
+document.querySelectorAll('.copy-action').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const editorId = btn.closest('.editor').classList[1];
         const action = btn.dataset.action;
@@ -72,7 +67,7 @@ function showErrors(errors) {
     
     setTimeout(() => {
         toast.classList.remove('show');
-    }, 5000); // Increased time to read multiple errors
+    }, 5000);
 }
 
 document.getElementById('run-code').addEventListener('click', () => {
@@ -85,41 +80,54 @@ document.getElementById('run-code').addEventListener('click', () => {
     const tagPattern = /<\/?([^\s>]+)[^>]*>/gi;
     let match;
 
+    // Check for malformed tags
+    const malformedPattern = /<[^>]*$/gm;
+    if (malformedPattern.test(htmlCode)) {
+        errors.push('HTML: Malformed or unclosed tag detected');
+    }
+
+    // Check for proper tag structure
     while ((match = tagPattern.exec(htmlCode)) !== null) {
         const fullTag = match[0];
         const tag = match[1].toLowerCase();
         
-        // Skip comments
         if (fullTag.startsWith('<!--')) continue;
-        
-        // Skip void elements
         if (voidElements.has(tag)) continue;
         
         const isClosing = fullTag.startsWith('</');
         
         if (!isClosing) {
-            openTags.push(tag);
+            openTags.push({tag, position: match.index});
         } else {
             const lastOpenTag = openTags.pop();
-            if (lastOpenTag !== tag) {
-                errors.push(`HTML: Mismatched tag. Found </${tag}>, expected </${lastOpenTag}>`);
+            if (!lastOpenTag || lastOpenTag.tag !== tag) {
+                errors.push(`HTML: Mismatched tag <${tag}>`);
             }
         }
     }
 
     if (openTags.length > 0) {
-        const unclosedTags = openTags.reverse().map(tag => `<${tag}>`).join(', ');
-        errors.push(`HTML: Unclosed tags: ${unclosedTags}`);
+        openTags.forEach(({tag}) => {
+            errors.push(`HTML: Unclosed tag <${tag}>`);
+        });
+    }
+
+    if (errors.length > 0) {
+        showErrors(errors);
+        return;
     }
 
     // CSS validation
-const cssCode = cssEditor.getValue().trim();
-if (cssCode && /{[^}]*$/.test(cssCode)) {
-    errors.push("CSS: Unclosed bracket detected");
-}
-if (cssCode && /[^;{\s]\s*}/.test(cssCode)) {
-    errors.push("CSS: Missing semicolon");
-}
+    const cssCode = cssEditor.getValue().trim();
+    const cssLines = cssCode.split('\n');
+    cssLines.forEach((line, index) => {
+        if (line.includes('{') && !line.includes('}') && !cssLines.slice(index).some(l => l.includes('}'))) {
+            errors.push(`CSS Line ${index + 1}: Unclosed bracket`);
+        }
+        if (line.includes('}') && !/;|\s*}/.test(line)) {
+            errors.push(`CSS Line ${index + 1}: Missing semicolon`);
+        }
+    });
 
     // JavaScript validation
     const jsCode = jsEditor.getValue();
@@ -134,40 +142,32 @@ if (cssCode && /[^;{\s]\s*}/.test(cssCode)) {
         return;
     }
 
-    const jsCodeWithErrorHandling = `
-        <script>
-            window.onerror = function(msg, url, lineNo, columnNo, error) {
-                window.parent.postMessage({
-                    type: 'error',
-                    message: msg,
-                    line: lineNo,
-                    column: columnNo
-                }, '*');
-                return false;
-            };
-            try {
-                ${jsCode}
-            } catch(e) {
-                window.onerror(e.message, null, e.lineNumber);
-            }
-        </script>
-    `;
-    
+    // If no errors, run the code
     const output = document.getElementById('output');
     output.srcdoc = `
         <!DOCTYPE html>
         <html>
             <head>
-                <style>${cssCode}</style>
+                <style>${cssEditor.getValue()}</style>
             </head>
             <body>
                 ${htmlCode}
-                ${jsCodeWithErrorHandling}
+                <script>
+                    window.onerror = function(msg, url, lineNo, columnNo, error) {
+                        window.parent.postMessage({
+                            type: 'error',
+                            message: msg,
+                            line: lineNo,
+                            column: columnNo
+                        }, '*');
+                        return false;
+                    };
+                    ${jsEditor.getValue()}
+                </script>
             </body>
         </html>
     `;
-});
-window.addEventListener('message', function(event) {
+});window.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'error') {
         const errorMsg = `${event.data.message}${event.data.line ? ` (line ${event.data.line})` : ''}`;
         showError(errorMsg);
