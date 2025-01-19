@@ -354,3 +354,42 @@ textarea {
         touch-action: manipulation;
     }
 }
+/* iOS specific improvements */
+@supports (-webkit-touch-callout: none) {
+    .editor {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    .CodeMirror {
+        -webkit-user-select: text;
+        -webkit-touch-callout: default;
+        touch-action: pan-y;
+    }
+
+    .editor-container {
+        display: flex;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        width: 100%;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        z-index: 1;
+    }
+
+    main {
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+        z-index: 0;
+    }
+}
+
+/* Enhanced container alignment for iOS */
+@supports (-webkit-touch-callout: none) {
+    .editor {
+        width: 100%;
+        margin-bottom: 1.5rem;
+        flex: 1 1 300px;
+    }
+}
