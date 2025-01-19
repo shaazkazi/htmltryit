@@ -19,7 +19,6 @@ body {
     background-color: var(--bg-color);
     color: var(--text-color);
     min-height: 100vh;
-    overflow-x: hidden;
 }
 
 header {
@@ -52,115 +51,13 @@ main {
 .editor {
     flex: 1;
     min-width: 300px;
-    background: #2d2d2d;
+    background: var(--editor-bg);
     padding: 1rem;
     border-radius: var(--border-radius);
     box-shadow: var(--box-shadow);
     border: 1px solid var(--border-color);
-    box-sizing: border-box;
 }
 
-.editor h2 {
-    color: var(--primary-color);
-    margin: 0 0 0.8rem 0;
-    font-size: 1.2rem;
-    border-bottom: 2px solid var(--primary-color);
-    padding-bottom: 0.5rem;
-}
-
-textarea {
-    width: 100%;
-    height: 250px;
-    padding: 1rem;
-    font-family: 'Fira Code', 'Consolas', monospace;
-    font-size: 0.9rem;
-    border: 1px solid var(--border-color);
-    border-radius: calc(var(--border-radius) - 2px);
-    resize: vertical;
-    line-height: 1.5;
-    tab-size: 4;
-    background-color: #1e1e1e;
-    color: #fff;
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-}
-
-.button-group {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-    flex-wrap: wrap;
-    justify-content: center;
-}
-
-button {
-    padding: 0.8rem 1.8rem;
-    font-size: 1rem;
-    color: white;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 120px;
-}
-
-#run-code {
-    background-color: var(--primary-color);
-    box-shadow: var(--box-shadow);
-}
-
-#run-code:hover {
-    background-color: var(--primary-hover);
-    transform: translateY(-2px);
-}
-
-.secondary {
-    background-color: #4a4a4a;
-}
-
-.secondary:hover {
-    background-color: #5a5a5a;
-    transform: translateY(-2px);
-}
-
-iframe {
-    width: 100%;
-    height: 400px;
-    border: 1px solid var(--border-color);
-    border-radius: var(--border-radius);
-    background-color: #ffffff;
-    box-shadow: var(--box-shadow);
-}
-
-@media (max-width: 768px) {
-    main {
-        width: 95%;
-        padding: 0.5rem;
-    }
-    
-    .editor {
-        min-width: 100%;
-        margin-bottom: 1rem;
-    }
-    
-    textarea {
-        height: 200px;
-    }
-    
-    button {
-        width: 100%;
-    }
-    
-    iframe {
-        height: 300px;
-    }
-}
 .editor h2 {
     color: var(--primary-color);
     margin: 0 0 0.8rem 0;
@@ -174,40 +71,39 @@ iframe {
 
 .editor h2 i {
     font-size: 1.4rem;
-    width: 24px;
-    height: 24px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
-/* Specific colors for each editor type */
-.editor.html h2 {
-    color: #FF5722;
+.editor.html h2 { color: #FF5722; }
+.editor.css h2 { color: #2196F3; }
+.editor.js h2 { color: #FFC107; }
+
+.editor.html h2 i { color: #FF5722; }
+.editor.css h2 i { color: #2196F3; }
+.editor.js h2 i { color: #FFC107; }
+
+textarea {
+    width: 100%;
+    height: 250px;
+    padding: 1rem;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    background-color: var(--editor-bg);
+    color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: calc(var(--border-radius) - 2px);
+    resize: none;
 }
 
-.editor.css h2 {
-    color: #2196F3;
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
 }
 
-.editor.js h2 {
-    color: #FFC107;
-}
-
-.editor.html h2 i {
-    color: #FF5722;
-}
-
-.editor.css h2 i {
-    color: #2196F3;
-}
-
-.editor.js h2 i {
-    color: #FFC107;
-}
-/* Webkit browsers (Chrome, Safari, newer Edge) */
+/* Scrollbar Styles */
 textarea::-webkit-scrollbar {
     width: 8px;
+    height: 8px;
 }
 
 textarea::-webkit-scrollbar-track {
@@ -219,15 +115,7 @@ textarea::-webkit-scrollbar-thumb {
     border-radius: 4px;
 }
 
-textarea::-webkit-scrollbar-thumb:hover {
-    background: rgb(122, 127, 142);
-}
-
-/* Firefox */
-textarea {
-    scrollbar-width: thin;
-    scrollbar-color: rgb(102, 107, 122) #2d2d2d;
-}
+/* Button Styles */
 .button-group {
     display: flex;
     gap: 1rem;
@@ -279,4 +167,145 @@ button {
 #share-code:hover {
     background: linear-gradient(45deg, #448aff, #82b1ff);
     transform: translateY(-2px);
+}
+
+iframe {
+    width: 100%;
+    height: 400px;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    background-color: #ffffff;
+    box-shadow: var(--box-shadow);
+}
+
+@media (max-width: 768px) {
+    main {
+        width: 95%;
+        padding: 0.5rem;
+    }
+    
+    .editor {
+        min-width: 100%;
+        margin-bottom: 1rem;
+    }
+    
+    button {
+        width: 100%;
+    }
+    
+    iframe {
+        height: 300px;
+    }
+}
+.editor {
+    flex: 1;
+    min-width: 300px;
+    background: var(--editor-bg);
+    padding: 1rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--box-shadow);
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
+    height: 300px;
+    overflow: hidden;
+}
+
+textarea {
+    width: 100%;
+    height: calc(100% - 3rem);
+    padding: 1rem;
+    font-family: 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    background-color: var(--editor-bg);
+    color: #fff;
+    border: 1px solid var(--border-color);
+    border-radius: calc(var(--border-radius) - 2px);
+    resize: none;
+    box-sizing: border-box;
+}
+
+/* Add these color variables */
+:root {
+    /* existing variables */
+    --comment-color: #6272a4;
+    --string-color: #f1fa8c;
+    --keyword-color: #ff79c6;
+    --tag-color: #ff79c6;
+    --function-color: #50fa7b;
+    --number-color: #bd93f9;
+}
+
+textarea {
+    /* Keep existing styles */
+    color: #d4d4d4; /* Base text color */
+}
+
+/* HTML Editor Colors */
+.editor.html textarea {
+    caret-color: #FF5722;
+}
+.editor.html textarea::selection {
+    background: rgba(255, 87, 34, 0.3);
+}
+
+/* CSS Editor Colors */
+.editor.css textarea {
+    caret-color: #2196F3;
+}
+.editor.css textarea::selection {
+    background: rgba(33, 150, 243, 0.3);
+}
+
+/* JavaScript Editor Colors */
+.editor.js textarea {
+    caret-color: #FFC107;
+}
+.editor.js textarea::selection {
+    background: rgba(255, 193, 7, 0.3);
+}
+
+/* Editor Theme Colors */
+.editor textarea {
+    color: #d4d4d4;
+}
+.editor textarea::placeholder {
+    color: #6272a4;
+}
+/* VS Code-inspired syntax colors */
+.editor.html textarea {
+    caret-color: #FF5722;
+    color: #e06c75; /* HTML tags */
+}
+
+.editor.css textarea {
+    caret-color: #2196F3;
+    color: #61afef; /* CSS properties */
+}
+
+.editor.js textarea {
+    caret-color: #FFC107;
+    color: #98c379; /* JS code */
+}
+
+/* Base text color for all editors */
+.editor textarea {
+    color: #abb2bf;
+}
+/* Add these styles for CodeMirror integration */
+.editor .CodeMirror {
+    height: calc(100% - 3rem);
+    border-radius: calc(var(--border-radius) - 2px);
+    font-family: 'Fira Code', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+.editor .CodeMirror-gutters {
+    background-color: var(--editor-bg);
+    border-right: 1px solid var(--border-color);
+}
+
+.editor .CodeMirror-linenumber {
+    color: #666;
 }
