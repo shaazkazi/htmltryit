@@ -309,3 +309,48 @@ textarea {
 .editor .CodeMirror-linenumber {
     color: #666;
 }
+/* CodeMirror Scrollbar Styling */
+.CodeMirror-simplescroll-horizontal div, .CodeMirror-simplescroll-vertical div {
+    width: 6px !important;
+    background: rgb(102, 107, 122);
+    border-radius: 4px;
+}
+
+.CodeMirror-scrollbar-filler {
+    background: transparent;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb {
+    background: rgb(102, 107, 122);
+    border-radius: 3px;
+}
+
+.CodeMirror-vscrollbar::-webkit-scrollbar-thumb:hover {
+    background: rgb(122, 127, 142);
+}
+/* Mobile touch improvements */
+.CodeMirror {
+    touch-action: pan-x pan-y;
+    -webkit-overflow-scrolling: touch;
+}
+
+.editor {
+    touch-action: none;
+    -webkit-user-select: text;
+    user-select: text;
+}
+
+@media (max-width: 768px) {
+    .CodeMirror {
+        pointer-events: auto;
+        touch-action: manipulation;
+    }
+}
