@@ -23,27 +23,36 @@ const jsEditor = CodeMirror.fromTextArea(document.getElementById('js-code'), {
     lineWrapping: true
 });
 
-// Add copy functionality
-function copyEditorContent(editorId) {
-    const content = editorId === 'html' ? htmlEditor.getValue() :
-                   editorId === 'css' ? cssEditor.getValue() :
-                   jsEditor.getValue();
-    
-    navigator.clipboard.writeText(content).then(() => {
-        const btn = document.querySelector(`.editor.${editorId} .copy-btn i`);
-        btn.className = 'fas fa-check';
-        btn.style.transform = 'scale(1.2)';
+function handleEditorAction(editorId, action) {
+    if (action === 'copy') {
+        const content = editorId === 'html' ? htmlEditor.getValue() :
+                       editorId === 'css' ? cssEditor.getValue() :
+                       jsEditor.getValue();
         
-        setTimeout(() => {
-            btn.className = 'fas fa-copy';
-            btn.style.transform = 'scale(1)';
-        }, 2000);
-    });
+        navigator.clipboard.writeText(content).then(() => {
+            const btn = document.querySelector(`.editor.${editorId} .copy-btn i`);
+            btn.className = 'fas fa-check';
+            setTimeout(() => {
+                btn.className = 'fas fa-ellipsis-vertical';
+            }, 2000);
+        });
+    } else if (action === 'paste') {
+        navigator.clipboard.readText().then(text => {
+            const editor = editorId === 'html' ? htmlEditor :
+                          editorId === 'css' ? cssEditor :
+                          jsEditor;
+            
+            const doc = editor.getDoc();
+            const cursor = doc.getCursor();
+            doc.replaceRange(text, cursor);
+        });
+    }
 }
-// Add click handlers for copy buttons
-document.querySelectorAll('.copy-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-        copyEditorContent(btn.dataset.editor);
+document.querySelectorAll('.copy-action').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        const editorId = btn.closest('.editor').classList[1];
+        const action = btn.dataset.action;
+        handleEditorAction(editorId, action);
     });
 });
 
@@ -88,4 +97,20 @@ ${jsEditor.getValue()}`;
     } catch (err) {
         console.error('Failed to copy:', err);
     }
+});
+
+// Add this to handle click-based dropdown
+document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const copyOptions = btn.closest('.copy-options');
+        copyOptions.classList.toggle('active');
+    });
+});
+
+// Close dropdown when clicking outside
+document.addEventListener('click', () => {
+    document.querySelectorAll('.copy-options.active').forEach(el => {
+        el.classList.remove('active');
+    });
 });

@@ -32,26 +32,58 @@
         <div class="editor-container">
             <div class="editor html">
                 <h2>
-                    <i class="fa-brands fa-html5"></i>HTML
-                    <button class="copy-btn" data-editor="html"><i class="fas fa-copy"></i></button>
+                    <span><i class="fa-brands fa-html5"></i>HTML</span>
+                    <div class="copy-options">
+                        <button class="copy-btn" data-editor="html"><i class="fas fa-ellipsis-vertical"></i></button>
+                        <div class="copy-dropdown">
+                            <button class="copy-action" data-action="copy">
+                                <i class="fas fa-copy"></i> Copy Code
+                            </button>
+                            <button class="copy-action" data-action="paste">
+                                <i class="fas fa-paste"></i> Paste Code
+                            </button>
+                        </div>
+                    </div>
                 </h2>
                 <textarea id="html-code" placeholder="Write HTML here..." spellcheck="false"></textarea>
             </div>
+        
             <div class="editor css">
                 <h2>
-                    <i class="fa-brands fa-css3-alt"></i>CSS
-                    <button class="copy-btn" data-editor="html"><i class="fas fa-copy"></i></button>
+                    <span><i class="fa-brands fa-css3-alt"></i>CSS</span>
+                    <div class="copy-options">
+                        <button class="copy-btn" data-editor="css"><i class="fas fa-ellipsis-vertical"></i></button>
+                        <div class="copy-dropdown">
+                            <button class="copy-action" data-action="copy">
+                                <i class="fas fa-copy"></i> Copy Code
+                            </button>
+                            <button class="copy-action" data-action="paste">
+                                <i class="fas fa-paste"></i> Paste Code
+                            </button>
+                        </div>
+                    </div>
                 </h2>
                 <textarea id="css-code" placeholder="Write CSS here..." spellcheck="false"></textarea>
             </div>
+        
             <div class="editor js">
                 <h2>
-                    <i class="fa-brands fa-square-js"></i>JavaScript
-                    <button class="copy-btn" data-editor="html"><i class="fas fa-copy"></i></button>
+                    <span><i class="fa-brands fa-square-js"></i>JavaScript</span>
+                    <div class="copy-options">
+                        <button class="copy-btn" data-editor="js"><i class="fas fa-ellipsis-vertical"></i></button>
+                        <div class="copy-dropdown">
+                            <button class="copy-action" data-action="copy">
+                                <i class="fas fa-copy"></i> Copy Code
+                            </button>
+                            <button class="copy-action" data-action="paste">
+                                <i class="fas fa-paste"></i> Paste Code
+                            </button>
+                        </div>
+                    </div>
                 </h2>
                 <textarea id="js-code" placeholder="Write JavaScript here..." spellcheck="false"></textarea>
             </div>
-        </div>
+        </div>                   
         <div class="button-group">
             <button id="run-code"><i class="fas fa-play"></i> Run Code</button>
             <button id="reset-code"><i class="fas fa-undo"></i> Reset</button>

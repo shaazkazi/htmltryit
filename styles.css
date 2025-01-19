@@ -543,3 +543,142 @@ header h1 img {
 header h1:hover img {
     transform: scale(1.1);
 }
+.copy-options {
+    position: relative;
+    padding: 5px;
+}
+
+.copy-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--editor-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 140px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.copy-options.active .copy-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(5px);
+}
+
+.copy-action {
+    background: transparent;
+    border: none;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-radius: 4px;
+    width: 100%;
+    text-align: left;
+}
+
+/* Mobile enhancements */
+@media (max-width: 768px) {
+    .copy-dropdown {
+        position: fixed;
+        top: auto;
+        bottom: 20px;
+        right: 20px;
+        transform: translateY(100px);
+        background: #363636;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    .copy-options.active .copy-dropdown {
+        transform: translateY(0);
+    }
+}
+.copy-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    background: var(--editor-bg);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    min-width: 160px;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.copy-action {
+    padding: 8px 12px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.copy-action:last-child {
+    border-bottom: none;
+}
+
+.copy-action i {
+    width: 16px;
+}
+
+/* Mobile optimization */
+@media (max-width: 768px) {
+    .copy-dropdown {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        top: auto;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+}
+.copy-action {
+    padding: 12px 16px;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid var(--border-color);
+    background: transparent;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    white-space: nowrap;
+}
+
+.copy-action i {
+    width: 18px;
+    font-size: 1rem;
+}
+
+.copy-action:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(2px);
+}
+
+/* Color-specific hover effects */
+.editor.html .copy-action:hover { background: rgba(255, 87, 34, 0.1); }
+.editor.css .copy-action:hover { background: rgba(33, 150, 243, 0.1); }
+.editor.js .copy-action:hover { background: rgba(255, 193, 7, 0.1); }
