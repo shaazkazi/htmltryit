@@ -602,11 +602,6 @@ header h1:hover img {
 .editor.html .copy-action:hover { background: rgba(255, 87, 34, 0.1); }
 .editor.css .copy-action:hover { background: rgba(33, 150, 243, 0.1); }
 .editor.js .copy-action:hover { background: rgba(255, 193, 7, 0.1); }
-.button-group {
-    display: flex;
-    gap: 1rem;
-    margin: 1rem 0;
-}
 
 .button-group {
     display: flex;
@@ -680,3 +675,91 @@ header h1:hover img {
     box-shadow: inset 0 0 0 1px #bd93f9;
 }
 
+/* Add line numbers to editors */
+.CodeMirror-linenumbers {
+    padding: 0 8px;
+    color: #666;
+}
+.editor {
+    position: relative;
+}
+
+.editor::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, #50fa7b, #bd93f9, #ff5555);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s;
+}
+
+.editor:focus-within::after {
+    transform: scaleX(1);
+}
+@media (max-width: 480px) {
+    .editor-container {
+        gap: 0.8rem;
+    }
+    
+    .button-group {
+        flex-direction: column;
+    }
+}
+.error-toast {
+    position: fixed;
+    bottom: calc(env(safe-area-inset-bottom) + 60px);
+    right: 20px;
+    background: #2d2d2d;
+    border: 1px solid #ff555540;
+    color: #ff5555;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    transform: translateX(120%);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 80vw;
+    visibility: hidden; /* Hide by default */
+}
+
+.error-toast.show {
+    transform: translateX(0);
+    visibility: visible;
+}
+body {
+    max-width: 100vw;
+    overflow-x: hidden;
+}
+
+main {
+    width: 100%;
+    max-width: 1400px;
+    margin: 1rem auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+}
+
+.editor-container {
+    width: 100%;
+    box-sizing: border-box;
+}
+.error-toast {
+    /* existing styles */
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.error-toast div {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}

@@ -56,13 +56,104 @@ document.querySelectorAll('.copy-action').forEach(btn => {
     });
 });
 
-document.getElementById('run-code').addEventListener('click', () => {
-    const htmlCode = htmlEditor.getValue();
-    const cssCode = `<style>${cssEditor.getValue()}</style>`;
-    const jsCode = `<script>${jsEditor.getValue()}</script>`;
-    const output = document.getElementById('output');
+function showErrors(errors) {
+    const toast = document.querySelector('.error-toast');
+    const errorList = errors.map(err => 
+        `<div><i class="fas fa-exclamation-circle"></i>${err}</div>`
+    ).join('');
     
-    output.srcdoc = `${htmlCode}${cssCode}${jsCode}`;
+    toast.innerHTML = errorList;
+    toast.classList.add('show');
+    
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 5000); // Increased time to read multiple errors
+}
+
+document.getElementById('run-code').addEventListener('click', () => {
+    const errors = [];
+    
+    // HTML validation
+    const htmlCode = htmlEditor.getValue();
+    const openTags = [];
+    const tagPattern = /<\/?([a-z0-9]+)[^>]*>/gi;
+    let match;
+    
+    while ((match = tagPattern.exec(htmlCode)) !== null) {
+        const tag = match[1];
+        const isClosing = match[0].startsWith('</');
+        
+        if (!isClosing) {
+            openTags.push(tag);
+        } else if (openTags.pop() !== tag) {
+            errors.push(`HTML: Mismatched or unclosed tag <${tag}>`);
+        }
+    }
+    
+    if (openTags.length > 0) {
+        errors.push(`HTML: Unclosed tag <${openTags[openTags.length - 1]}>`);
+    }
+
+    // CSS validation
+    const cssCode = cssEditor.getValue();
+    if (/{[^}]*$/.test(cssCode)) {
+        errors.push("CSS: Unclosed bracket detected");
+    }
+    if (/[^;{\s]\s*}/.test(cssCode)) {
+        errors.push("CSS: Missing semicolon");
+    }
+
+    // JavaScript validation
+    const jsCode = jsEditor.getValue();
+    try {
+        new Function(jsCode);
+    } catch (e) {
+        errors.push(`JavaScript: ${e.message}`);
+    }
+
+    if (errors.length > 0) {
+        showErrors(errors);
+        return;
+    }
+
+    const jsCodeWithErrorHandling = `
+        <script>
+            window.onerror = function(msg, url, lineNo, columnNo, error) {
+                window.parent.postMessage({
+                    type: 'error',
+                    message: msg,
+                    line: lineNo,
+                    column: columnNo
+                }, '*');
+                return false;
+            };
+            try {
+                ${jsCode}
+            } catch(e) {
+                window.onerror(e.message, null, e.lineNumber);
+            }
+        </script>
+    `;
+    
+    const output = document.getElementById('output');
+    output.srcdoc = `
+        <!DOCTYPE html>
+        <html>
+            <head>
+                <style>${cssCode}</style>
+            </head>
+            <body>
+                ${htmlCode}
+                ${jsCodeWithErrorHandling}
+            </body>
+        </html>
+    `;
+});
+window.addEventListener('message', function(event) {
+    if (event.data && event.data.type === 'error') {
+        const errorMsg = `${event.data.message}${event.data.line ? ` (line ${event.data.line})` : ''}`;
+        showError(errorMsg);
+    }
 });
 
 document.getElementById('reset-code').addEventListener('click', () => {
@@ -114,3 +205,34 @@ document.addEventListener('click', () => {
         el.classList.remove('active');
     });
 });
+
+// Add to script.js
+function autoSave() {
+    const code = {
+        html: htmlEditor.getValue(),
+        css: cssEditor.getValue(),
+        js: jsEditor.getValue()
+    };
+    localStorage.setItem('savedCode', JSON.stringify(code));
+}
+
+// Auto-save every 30 seconds
+setInterval(autoSave, 30000);
+
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+        document.getElementById('run-code').click();
+    }
+    if (e.ctrlKey && e.key === 's') {
+        e.preventDefault();
+        autoSave();
+    }
+});
+
+function formatCode() {
+    // Add Prettier formatting
+    const formatted = prettier.format(code, {
+        parser: "babel",
+        plugins: prettierPlugins
+    });
+}
