@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Interactive code editor for HTML, CSS and JavaScript">
+    <title>Try Me - Live Code Editor</title>
+    <!-- Add this in the head section -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAAsTAAALEwEAmpwYAAABR0lEQVR42mNgGPKAkZHRRkhIaIWoqOhdLS2tA1JSUv8ZGBj+U2wAExOTrYyMzB0+Pr5/bGxs/9nZ2f+LiIj8l5eXv8/MzGxDkQtYWVkdJCUl77Ozs/9nYmL6z8DA8J+Xl/e/mJjYf1VV1QNUCQNhYeEVnJyc/9nY2P5zcXH9FxAQ+K+jo/OfXBeIiYndZWFh+c/Pz/9fXFz8v7q6+n89Pb37ZBvAzs7uICgo+F9GRua/qqrqfyMjo/96enr/TUxM9pNtAA8Pj4OsrOx/PT29/9bW1v+dnZ3/u7m5/XdxcdlPtgFCQkIrVFRU/tvY2Pz38PD47+vr+9/Hx+e/p6fnCrINEBMTu2tiYvLf19f3f1BQ0P/g4OD//v7+/y0sLO6SbQAvL6+DjY3N/7CwsP8REREgHArEof+dnJz2k204AwPDEAYAWr+DeGnYgXEAAAAASUVORK5CYII=">
+</head>
+<body>
+    <header>
+        <h1>Try Me</h1>
+        <p>Live Code Editor - Write, Preview, Share</p>
+    </header>
+    <main>
+        <div class="editor-container">
+            <div class="editor html">
+                <h2><i class="fa-brands fa-html5"></i>HTML</h2>
+                <textarea id="html-code" placeholder="Write HTML here..." spellcheck="false" autocomplete="off"></textarea>
+            </div>
+            <div class="editor css">
+                <h2><i class="fa-brands fa-css3-alt"></i>CSS</h2>
+                <textarea id="css-code" placeholder="Write CSS here..." spellcheck="false" autocomplete="off"></textarea>
+            </div>
+            <div class="editor js">
+                <h2><i class="fa-brands fa-square-js"></i>JavaScript</h2>
+                <textarea id="js-code" placeholder="Write JavaScript here..." spellcheck="false" autocomplete="off"></textarea>
+            </div>
+        </div>
+        <div class="button-group">
+            <button id="run-code" title="Execute code (Ctrl+Enter)">Run Code</button>
+            <button id="reset-code" class="secondary" title="Clear all editors">Reset</button>
+            <button id="share-code" class="secondary" title="Copy shareable link">Share</button>
+        </div>
+        <iframe id="output" title="Code Output" sandbox="allow-scripts allow-modals"></iframe>
+    </main>
+    <footer>
+        <p>Built with ❤️ for developers</p>
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
