@@ -46,9 +46,14 @@ function handleEditorAction(editorId, action) {
             const cursor = doc.getCursor();
             doc.replaceRange(text, cursor);
         });
+    } else if (action === 'clear') {
+        const editor = editorId === 'html' ? htmlEditor :
+                      editorId === 'css' ? cssEditor :
+                      jsEditor;
+        editor.setValue('');
+        editor.clearHistory();
     }
-}
-document.querySelectorAll('.copy-action').forEach(btn => {
+}document.querySelectorAll('.copy-action').forEach(btn => {
     btn.addEventListener('click', (e) => {
         const editorId = btn.closest('.editor').classList[1];
         const action = btn.dataset.action;
@@ -75,33 +80,46 @@ document.getElementById('run-code').addEventListener('click', () => {
     
     // HTML validation
     const htmlCode = htmlEditor.getValue();
+    const voidElements = new Set(['!doctype', 'area', 'base', 'br', 'col', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source', 'track', 'wbr']);
     const openTags = [];
-    const tagPattern = /<\/?([a-z0-9]+)[^>]*>/gi;
+    const tagPattern = /<\/?([^\s>]+)[^>]*>/gi;
     let match;
-    
+
     while ((match = tagPattern.exec(htmlCode)) !== null) {
-        const tag = match[1];
-        const isClosing = match[0].startsWith('</');
+        const fullTag = match[0];
+        const tag = match[1].toLowerCase();
+        
+        // Skip comments
+        if (fullTag.startsWith('<!--')) continue;
+        
+        // Skip void elements
+        if (voidElements.has(tag)) continue;
+        
+        const isClosing = fullTag.startsWith('</');
         
         if (!isClosing) {
             openTags.push(tag);
-        } else if (openTags.pop() !== tag) {
-            errors.push(`HTML: Mismatched or unclosed tag <${tag}>`);
+        } else {
+            const lastOpenTag = openTags.pop();
+            if (lastOpenTag !== tag) {
+                errors.push(`HTML: Mismatched tag. Found </${tag}>, expected </${lastOpenTag}>`);
+            }
         }
     }
-    
+
     if (openTags.length > 0) {
-        errors.push(`HTML: Unclosed tag <${openTags[openTags.length - 1]}>`);
+        const unclosedTags = openTags.reverse().map(tag => `<${tag}>`).join(', ');
+        errors.push(`HTML: Unclosed tags: ${unclosedTags}`);
     }
 
     // CSS validation
-    const cssCode = cssEditor.getValue();
-    if (/{[^}]*$/.test(cssCode)) {
-        errors.push("CSS: Unclosed bracket detected");
-    }
-    if (/[^;{\s]\s*}/.test(cssCode)) {
-        errors.push("CSS: Missing semicolon");
-    }
+const cssCode = cssEditor.getValue().trim();
+if (cssCode && /{[^}]*$/.test(cssCode)) {
+    errors.push("CSS: Unclosed bracket detected");
+}
+if (cssCode && /[^;{\s]\s*}/.test(cssCode)) {
+    errors.push("CSS: Missing semicolon");
+}
 
     // JavaScript validation
     const jsCode = jsEditor.getValue();
